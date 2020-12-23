@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -51,37 +50,42 @@ class _MyWebView extends State<MyHomePage> {
     return await webView.reload();
   }
 
-  Future<Void> get home async {
-    webView.loadUrl(url: "https://livesawa.com/");
+  void _getSizes() {
+    for (int i = 0; i < _key.length; i++) {
+      RenderBox renderBoxRed = _key[i].currentContext.findRenderObject();
+      pos[i] = renderBoxRed.localToGlobal(Offset.zero).dx + 10;
+    }
+  }
+
+  void _afterLayout(_) {
+    //_onTab(1);
+    _getSizes();
+  }
+
+  Future<Null> get home async {
     Navigator.pop(context);
     setState(() {
       this.url = "https://livesawa.com/";
       this.titles = 'Accueil | LiveSawa';
     });
+    return await webView.loadUrl(url: "https://livesawa.com/");
   }
 
-  Future<Void> get geoLoca async {
-    await webView.loadUrl(url: "https://allrestos.com/index.php/restos-map/");
-    Navigator.pop(context);
-    setState(() {
-      this.url = "https://allrestos.com/index.php/restos-map/";
-      this.titles = 'Restos Map';
-    });
-  }
 
-  Future<Void> get retos async {
-    await webView.loadUrl(url: "https://allrestos.com/?search_term=&lcats");
+  Future<Null> get retos async {
     Navigator.pop(context);
     setState(() {
       this.url = "https://allrestos.com/?search_term=&lcats";
       this.titles = 'Restos';
     });
+    return await webView.loadUrl(url: "https://allrestos.com/?search_term=&lcats");
   }
 
   @override
   void initState() {
-    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     if (Platform.isAndroid) ds.WebView.platform = ds.SurfaceAndroidWebView();
+    super.initState();
   }
 
   @override
@@ -93,45 +97,22 @@ class _MyWebView extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        body: myChild(),
+        appBar: AppBar(
+          title: Text(this.titles),
+          bottom: PreferredSize(
+            preferredSize: Size(double.infinity, 1.0),
+            child: progress < 1.0
+                ? LinearProgressIndicator(
+                    value: progress,
+                    backgroundColor: Colors.yellow,
+                  )
+                : Container(),
+          ),
+        ),
+        body: myBody(),
         bottomNavigationBar: bottomNavigationBar());
   }
 
-  void _onTab(int value) {
-    setState(() {
-      //_currentIndex = value;
-      switch (value) {
-        case 0:
-          geoLoca;
-          break;
-        case 1:
-          home;
-          break;
-        case 2:
-          retos;
-          break;
-        default:
-      }
-    });
-  }
-
-
-
-  Widget myChild() => NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return <Widget>[
-            SliverAppBar(
-              backgroundColor: Colors.grey[100],
-              pinned: false,
-              floating: false,
-              expandedHeight: 100.0,
-              toolbarHeight: 60,
-              flexibleSpace:_GridTitleText(this.titles),
-            )
-          ];
-        },
-        body: myBody(),
-      );
 
   Widget myBody() {
     return RefreshIndicator(
@@ -240,9 +221,28 @@ class _MyWebView extends State<MyHomePage> {
                     icon: Icon(CustomIcons.home_1, key: _key[1]),
                     label: "Home"),
                 BottomNavigationBarItem(
-                    icon: Icon(CustomIcons.chat, key: _key[2]), label: "Resto"),
+                    icon: Icon(CustomIcons.chat, key: _key[2]),
+                    label: "Resto"),
               ],
-              onTap: _onTab,
+              onTap: (value) async {
+                Navigator.pop(context);
+                switch (value) {
+                    case 0:
+                      await webView.loadUrl(url: "https://allrestos.com/index.php/restos-map/");
+                      setState(() {
+                        this.url = "https://allrestos.com/index.php/restos-map/";
+                        this.titles = 'Restos Map';
+                      });
+                      break;
+                    case 1:
+                      await home;
+                      break;
+                    case 2:
+                      await retos;
+                      break;
+                    default:
+                  }
+                }
             ),
             AnimatedPositioned(
               duration: Duration(microseconds: 300),
@@ -261,6 +261,7 @@ class _MyWebView extends State<MyHomePage> {
         ));
   }
 }
+
 class _GridTitleText extends StatelessWidget {
   const _GridTitleText(this.text);
 
@@ -269,12 +270,10 @@ class _GridTitleText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlexibleSpaceBar(
-                title: Text( text,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        color: Colors.black87,
-                        fontSize: 22.0)),
-              );
+      title: Text(text,
+          textAlign: TextAlign.start,
+          style: TextStyle(color: Colors.black87, fontSize: 22.0)),
+    );
   }
 }
 //document.querySelector('.sticky-wrapper').classList.add('hidden');
