@@ -66,7 +66,8 @@ class _MyHomePageState extends State<Restos>
                       (InAppWebViewController controller, String url) async {
                     await webView.evaluateJavascript(
                         source:
-                            """document.getElementsByClassName('main-header')[0].style.display = 'none';
+                            """document.getElementById('main-theme').style.top= '-80px';
+                              document.getElementsByClassName('main-header')[0].style.display = 'none';
                                  document.getElementsByClassName('main-footer')[0].style.display = 'none';
                               """);
                     setState(() {
@@ -76,8 +77,9 @@ class _MyHomePageState extends State<Restos>
                   onLoadStop:
                       (InAppWebViewController controller, String url) async {
                     await webView.evaluateJavascript(
-                        source: """document.getElementById('wrapper').remove();
-                               document.getElementsByClassName('main-header')[0].style.display = 'none';
+                        source:
+                            """document.getElementById('main-theme').style.top= '-80px';
+                            document.getElementsByClassName('main-header')[0].style.display = 'none';
                                document.getElementsByClassName('main-footer')[0].style.display = 'none';
                               """);
                     String tt = await controller.getTitle();

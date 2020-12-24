@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
             url: "https://allrestos.com/?search_term=&lcats",
             title: "Restos - allrestos"),
       },
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(primaryColor: Colors.white),
     );
   }
 }
@@ -59,7 +59,7 @@ class _MyWebView extends State<MyHomePage> {
   }
 
   void _afterLayout(_) {
-    //_onTab(1);
+    _onTab(1);
     _getSizes();
   }
 

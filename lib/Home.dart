@@ -30,7 +30,7 @@ class _MyHomePageState extends State<Home> with SingleTickerProviderStateMixin {
           child: progress < 1.0
               ? LinearProgressIndicator(
                   value: progress,
-                  backgroundColor: Colors.yellow,
+                  backgroundColor: Colors.white,
                 )
               : Container(),
         ),
@@ -66,8 +66,8 @@ class _MyHomePageState extends State<Home> with SingleTickerProviderStateMixin {
                       (InAppWebViewController controller, String url) async {
                     await webView.evaluateJavascript(
                         source:
-                            """document.getElementsByClassName('main-header')[0].style.display = 'none';
-                                 document.getElementsByClassName('main-footer')[0].style.display = 'none';
+                            """document.getElementById('main-theme').style.top= '-80px';
+                               document.getElementsByClassName('main-footer')[0].style.display = 'none';
                               """);
                     setState(() {
                       this.url = url;
@@ -76,8 +76,9 @@ class _MyHomePageState extends State<Home> with SingleTickerProviderStateMixin {
                   onLoadStop:
                       (InAppWebViewController controller, String url) async {
                     await webView.evaluateJavascript(
-                        source: """document.getElementById('wrapper').remove();
-                               document.getElementsByClassName('main-header')[0].style.display = 'none';
+                        source:
+                            """document.getElementById('main-theme').style.top= '-80px';
+                              document.getElementsByClassName('main-header')[0].style.display = 'none';
                                document.getElementsByClassName('main-footer')[0].style.display = 'none';
                               """);
                     String tt = await controller.getTitle();
