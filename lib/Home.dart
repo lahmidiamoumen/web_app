@@ -131,3 +131,4 @@ class _MyHomePageState extends State<Home> with SingleTickerProviderStateMixin {
     );
   }
 }
+// document.getElementsByClassName('logreg-modal-open')[0].click();
