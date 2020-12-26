@@ -26,7 +26,7 @@ class _MyHomePageState extends State<Home> with SingleTickerProviderStateMixin {
     final AlertDialog alertDialog = AlertDialog(
       title: Text('À propos de nous'),
       content: Text(
-          " a pour vocation de vous faire découvrir les restaurants d’Algérie et  de vous offrir un panel de découvertes culinaires," +
+          "A pour vocation de vous faire découvrir les restaurants d’Algérie et  de vous offrir un panel de découvertes culinaires," +
               " en commençant par la capitale Alger suivi des autres villes et wilaya qui s'étendent sur tout le territoire algérien. "),
       actions: [
         FlatButton(
@@ -42,7 +42,7 @@ class _MyHomePageState extends State<Home> with SingleTickerProviderStateMixin {
         title: Text(this.titles),
         actions: <Widget>[
           PopupMenuButton(
-              icon: Icon(CustomIcons.cog_1),
+              icon: Icon(Icons.more_vert),
               onSelected: (result) {
                 if (result == 0) {
                   webView.evaluateJavascript(

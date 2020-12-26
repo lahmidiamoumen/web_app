@@ -14,9 +14,10 @@ class Restos extends StatefulWidget {
 
 class _MyHomePageState extends State<Restos>
     with SingleTickerProviderStateMixin {
-  InAppWebViewController webView;
   String url = "https://allrestos.com/?search_term=&lcats";
   String titles = "Restos - allrestos";
+  InAppWebViewController webView;
+
   double progress = 0;
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       new GlobalKey<RefreshIndicatorState>();
@@ -42,7 +43,7 @@ class _MyHomePageState extends State<Restos>
         title: Text(this.titles),
         actions: <Widget>[
           PopupMenuButton(
-              icon: Icon(CustomIcons.cog_1),
+              icon: Icon(Icons.more_vert),
               onSelected: (result) {
                 if (result == 0) {
                   webView.evaluateJavascript(
@@ -110,9 +111,12 @@ class _MyHomePageState extends State<Restos>
                   initialUrl: this.url,
                   initialHeaders: {},
                   initialOptions: InAppWebViewGroupOptions(
+                      android: AndroidInAppWebViewOptions(
+                          cacheMode: AndroidCacheMode.LOAD_CACHE_ELSE_NETWORK),
                       crossPlatform: InAppWebViewOptions(
-                    debuggingEnabled: false,
-                  )),
+                        debuggingEnabled: false,
+                        cacheEnabled: true,
+                      )),
                   onWebViewCreated: (InAppWebViewController controller) {
                     webView = controller;
                   },
